@@ -1,0 +1,29 @@
+<head>
+    <script src="OmegaNum.js"></script>
+    <script src="main.js"></script>
+    <script src="Multiplier Boost.js"></script>
+    <style>
+        @font-face {
+            font-family: a;
+            src: url("MonospaceTypewriter.ttf");
+        };
+    </style>
+</head>
+    <body style="font-family: a;">
+        <p id="Points"></p>
+        <p id="pps"></p>
+        <br>
+        <p id="first" style="text-align: left; font-family: a; position: relative; bottom: 0.15cm;">First Generator</p>
+        <p id="firstamount" style="text-align: center; font-family: a; bottom: 1.25cm; position: relative;"></p>
+        <button id="firstcost" style="font-family: a; bottom: 2.25cm; float: right; position: relative;" onclick="gen1()"></button>
+        <p id="second" style="text-align: left; font-family: a; position: relative; bottom: 0.94cm;">Second Generator</p>
+        <p id="secondamount" style="text-align: center; font-family: a; bottom: 2cm; position: relative;"></p>
+        <button id="secondcost" style="font-family: a; bottom: 3cm; float: right; position: relative;" onclick="gen2()"></button>
+        <p id="third" style="text-align: left; font-family: a; position: relative; bottom: 1.73cm;">Second Generator</p>
+        <p id="thirdamount" style="text-align: center; font-family: a; bottom: 2.75cm; position: relative;"></p>
+        <button id="thirdcost" style="font-family: a; bottom: 3.75cm; float: right; position: relative;" onclick="gen3()"></button>
+        <p id="MBamount" style="bottom: 2cm; position: relative;"></p>
+        <button id="MBreset" style="font-family: a; bottom: 3cm; position: relative; float: right;" onclick="MultiplierBoost()"></button>
+        <button onclick="Save()" style="font-family: a;">Save</button>
+        <button onclick="Load()" style="font-family: a;">Load</button>
+</body>
