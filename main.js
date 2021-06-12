@@ -51,7 +51,7 @@ function AddPoints() {
 };
 
 function gen1() {
-    if (OmegaNum.cmp(game.points.total, game.generator1.cost) >= 0) {
+    while (OmegaNum.cmp(game.points.total, game.generator1.cost) >= 0) {
         game.points.total = OmegaNum.sub(game.points.total, game.generator1.cost);
         game.generator1.cost = OmegaNum.pow(3, OmegaNum.add(game.generator1.bought, 1)).times(10);
         game.generator1.multiplier = OmegaNum.times(game.generator1.multiplier, game.per1.total);
@@ -61,7 +61,7 @@ function gen1() {
 }
 
 function gen2() {
-    if (OmegaNum.cmp(game.points.total, game.generator2.cost) >= 0) {
+    while (OmegaNum.cmp(game.points.total, game.generator2.cost) >= 0) {
         game.points.total = OmegaNum.sub(game.points.total, game.generator2.cost);
         game.generator2.cost = OmegaNum.pow(5.196, OmegaNum.add(game.generator2.bought, 1)).times(1000);
         game.generator2.multiplier = OmegaNum.times(game.generator2.multiplier, game.per1.total);
@@ -71,7 +71,7 @@ function gen2() {
 };
 
 function gen3() {
-    if (OmegaNum.cmp(game.points.total, game.generator3.cost) >= 0) {
+    while (OmegaNum.cmp(game.points.total, game.generator3.cost) >= 0) {
         game.points.total = OmegaNum.sub(game.points.total, game.generator3.cost);
         game.generator3.cost = OmegaNum.pow(11.84, OmegaNum.add(game.generator3.bought, 1)).times(100000);
         game.generator3.multiplier = OmegaNum.times(game.generator3.multiplier, game.per1.total);
@@ -85,6 +85,8 @@ var mainGameLoop = window.setInterval(function() {
 }, 20);
 
 function ui() {
+    game.per1.requirement = OmegaNum.pow(1e7, OmegaNum.pow(1.3, game.per1.reset));
+    game.per1.total = OmegaNum.times(OmegaNum.pow(1.05, game.per1.reset), 1.1);
     document.getElementById("Points").innerHTML = `<p style="text-align: center; font-family: a; font-size: 200%;">You have ${notate2(game.points.total)} points.</p>`;
     document.getElementById("pps").innerHTML = `<p style="text-align: center; font-family: a; bottom: 0.5cm; position: relative;">(${notate(OmegaNum.times(game.points.perTick, 50))}/s)</p>`;
     document.getElementById("firstamount").innerHTML = `${notate2(game.generator1.amount)} (${notate2(game.generator1.bought)})`;
