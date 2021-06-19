@@ -65,7 +65,7 @@ function gen1() {
         } else {
             game.generator1.cost = OmegaNum.pow(2.5, OmegaNum.add(game.generator1.bought, 1)).times(10);
         }
-        game.generator1.multiplier = OmegaNum.pow(game.per1.total, game.generator1.bought).times(game.genmult.total);
+        game.generator1.multiplier = OmegaNum.pow(game.per1.total, OmegaNum.add(game.generator1.bought, 1)).times(game.genmult.total);
         game.generator1.bought = OmegaNum.add(game.generator1.bought, 1);
         game.generator1.amount = OmegaNum.add(game.generator1.amount, 1);
     }
@@ -79,7 +79,7 @@ function gen2() {
         } else {
             game.generator2.cost = OmegaNum.pow(4, OmegaNum.add(game.generator2.bought, 2)).times(1000);
         }
-        game.generator2.multiplier = OmegaNum.pow(game.per1.total, game.generator2.bought).times(game.genmult.total);
+        game.generator2.multiplier = OmegaNum.pow(game.per1.total, OmegaNum.add(game.generator2.bought, 1)).times(game.genmult.total);
         game.generator2.bought = OmegaNum.add(game.generator2.bought, 1);
         game.generator2.amount = OmegaNum.add(game.generator2.amount, 1);
     };
@@ -93,7 +93,7 @@ function gen3() {
         } else {
             game.generator3.cost = OmegaNum.pow(8, OmegaNum.add(game.generator3.bought, 1)).times(100000);
         }
-        game.generator3.multiplier = OmegaNum.pow(game.per1.total, game.generator3.bought).times(game.genmult.total);
+        game.generator3.multiplier = OmegaNum.pow(game.per1.total, OmegaNum.add(game.generator3.bought, 1)).times(game.genmult.total);
         game.generator3.bought = OmegaNum.add(game.generator3.bought, 1);
         game.generator3.amount = OmegaNum.add(game.generator3.amount, 1);
     };
