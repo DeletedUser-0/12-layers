@@ -91,7 +91,6 @@ function upgrade2() {
 
 function upgrade3() {
     while (OmegaNum.cmp(game.points.total, game.upgrade3.cost) >= 0) {
-        game.points.total = OmegaNum.sub(game.points.total, game.upgrade3.cost);
         game.upgrade3.cost = OmegaNum.times(game.upgrade3.cost, 1.67);
         game.points.multiplier = OmegaNum.times(game.points.multiplier, game.upgrade3.effect);
         game.upgrade3.level = OmegaNum.add(game.upgrade3.level, 1);
