@@ -1,181 +1,131 @@
 class Game {
     constructor(data) {
-        this.time = data?.time || 0;
-
+        this.units = {
+            total: data?.units?.total || 10,
+            pow: data?.units?.pow || 0.9999,
+            start: data?.units?.start || 10,
+            end: data?.units?.end || 1.5,
+            time: data?.units?.time || 0,
+        };
         this.points = {
-            total: data?.points?.total || 10,
-            perTick: data?.points?.perTick || 0,
+            total: data?.points?.total || 0,
+            multiplier: data?.points?.multiplier || 1,
         };
-
-        this.per1 = {
-            total: data?.per1?.total || 1.25,
-            increase: data?.per1?.increase || 0,
-            requirement: data?.per1?.requirement || 1e7,
-            reset: data?.per1?.reset || 0,
+        this.upgrade1 = {
+            cost: data?.upgrade1?.cost || 1,
+            level: data?.upgrade1?.level || 0,
+            effect: data?.upgrade1?.effect || 1.00005,
         };
-
-        this.generator1 = {
-            bought: data?.generator1?.bought || 0,
-            amount: data?.generator1?.amount || 0,
-            cost: data?.generator1?.cost || 10,
-            multiplier: data?.generator1?.multiplier || 1,
+        this.upgrade2 = {
+            cost: data?.upgrade2?.cost || 10,
+            level: data?.upgrade2?.level || 0,
+            effect: data?.upgrade2?.effect || 1.16,
         };
-
-        this.generator2 = {
-            bought: data?.generator2?.bought || 0,
-            amount: data?.generator2?.amount || 0,
-            cost: data?.generator2?.cost || 1000,
-            multiplier: data?.generator2?.multiplier || 1,
-            perTick: data?.generator2?.perTick || 0.007,
+        this.upgrade3 = {
+            cost: data?.upgrade3?.cost || 100,
+            level: data?.upgrade3?.level || 0,
+            effect: data?.upgrade3?.effect || 1.06,
         };
-
-        this.generator3 = {
-            bought: data?.generator3?.bought || 0,
-            amount: data?.generator3?.amount || 0,
-            cost: data?.generator3?.cost || 100000,
-            multiplier: data?.generator3?.multiplier || 1,
-            perTick: data?.generator3?.perTick || 0.004,
+        this.upgrade4 = {
+            cost: data?.upgrade4?.cost || 1e20,
+            level: data?.upgrade4?.level || 0,
         };
-
-        this.genmult = {
-            total: data?.genmult?.total || 1,
-            increase: data?.genmult?.increase || 3,
-            requirement: data?.genmult?.requirement || 10,
-            reset: data?.genmult?.reset || 0,
+        this.upgrade5 = {
+            cost: data?.upgrade5?.cost || new OmegaNum("1e1000"),
+            level: data?.upgrade5?.level || 0,
+        };
+        this.upgrade6 = {
+            cost: data?.upgrade6?.cost || new OmegaNum("1e1000000"),
+            level: data?.upgrade6?.level || 0,
         };
     };
 };
 
-var game = new Game()
-
-function AddPoints() {
-    game.points.perTick = OmegaNum.times(OmegaNum.times(0.02, game.generator1.amount), game.generator1.multiplier);
-    game.points.total = OmegaNum.add(game.points.perTick, game.points.total);
-    game.generator2.perTick = OmegaNum.times(OmegaNum.times(0.007, game.generator2.amount), game.generator2.multiplier);
-    game.generator3.perTick = OmegaNum.times(OmegaNum.times(0.004, game.generator3.amount), game.generator3.multiplier);
-    game.generator1.amount = OmegaNum.add(game.generator1.amount, game.generator2.perTick);
-    game.generator2.amount = OmegaNum.add(game.generator2.amount, game.generator3.perTick);
-};
-
-function gen1() {
-    while (OmegaNum.cmp(game.points.total, game.generator1.cost) >= 0) {
-        game.points.total = OmegaNum.sub(game.points.total, game.generator1.cost);
-        if (OmegaNum.cmp(game.points.total, 1e25) >= 0) {
-            game.generator1.cost = OmegaNum.pow(game.generator1.cost, 1.03);
-        } else {
-            game.generator1.cost = OmegaNum.pow(2.2, OmegaNum.add(game.generator1.bought, 1)).times(10);
-        }
-        game.generator1.multiplier = OmegaNum.times(game.generator1.multiplier, game.per1.total);
-        game.generator1.bought = OmegaNum.add(game.generator1.bought, 1);
-        game.generator1.amount = OmegaNum.add(game.generator1.amount, 1);
-    }
-}
-
-function gen2() {
-    while (OmegaNum.cmp(game.points.total, game.generator2.cost) >= 0) {
-        if (OmegaNum.cmp(game.points.total, 1e25) >= 0) {
-            game.generator2.cost = OmegaNum.pow(game.generator2.cost, 1.035);
-        } else {
-            game.generator2.cost = OmegaNum.pow(3.3, OmegaNum.add(game.generator2.bought, 2)).times(1000);
-        }
-        game.generator2.multiplier = OmegaNum.times(game.generator2.multiplier, game.per1.total);
-        game.generator2.bought = OmegaNum.add(game.generator2.bought, 1);
-        game.generator2.amount = OmegaNum.add(game.generator2.amount, 1);
-    };
-};
-
-function gen3() {
-    while (OmegaNum.cmp(game.points.total, game.generator3.cost) >= 0) {
-        game.points.total = OmegaNum.sub(game.points.total, game.generator3.cost);
-        if (OmegaNum.cmp(game.points.total, 1e25) >= 0) {
-            game.generator3.cost = OmegaNum.pow(game.generator3.cost, 1.042);
-        } else {
-            game.generator3.cost = OmegaNum.pow(6, OmegaNum.add(game.generator3.bought, 1)).times(100000);
-        }
-        game.generator3.multiplier = OmegaNum.times(game.generator3.multiplier, game.per1.total);
-        game.generator3.bought = OmegaNum.add(game.generator3.bought, 1);
-        game.generator3.amount = OmegaNum.add(game.generator3.amount, 1);
-    };
-};
-
-var mainGameLoop = window.setInterval(function () {
-    AddPoints();
-}, 20);
+var game = new Game();
 
 function ui() {
-    game.per1.requirement = OmegaNum.pow(1e7, OmegaNum.pow(1.3, game.per1.reset));
-    game.per1.total = OmegaNum.times(OmegaNum.pow(1.05, game.per1.reset), 1.1);
-    document.getElementById("Points").innerHTML = `<p style="text-align: center; font-family: a; font-size: 200%;">You have ${notate2(game.points.total)} points.</p>`;
-    document.getElementById("pps").innerHTML = `<p style="text-align: center; font-family: a; bottom: 0.5cm; position: relative;">(${notate2(OmegaNum.times(game.points.perTick, 50))}/s)</p>`;
-    document.getElementById("firstamount").innerHTML = `${notate2(game.generator1.amount)} (${notate2(game.generator1.bought)})`;
-    document.getElementById("firstcost").innerHTML = `Cost: ${notate(game.generator1.cost)}`;
-    document.getElementById("first").innerHTML = `First Generator (${notate(game.generator1.multiplier)}x)`;
-    document.getElementById("secondamount").innerHTML = `${notate2(game.generator2.amount)} (${notate2(game.generator2.bought)})`;
-    document.getElementById("secondcost").innerHTML = `Cost: ${notate(game.generator2.cost)}`;
-    document.getElementById("second").innerHTML = `Second Generator (${notate(game.generator2.multiplier)}x)`;
-    document.getElementById("thirdamount").innerHTML = `${notate2(game.generator3.amount)}`;
-    document.getElementById("thirdcost").innerHTML = `Cost: ${notate(game.generator3.cost)}`;
-    document.getElementById("third").innerHTML = `Third Generator (${notate(game.generator3.multiplier)}x)`;
-    document.getElementById("MBamount").innerHTML = `Multiplier Boost (${notate2(game.per1.reset)}): requires ${notate2(game.per1.requirement)} points.`;
-    document.getElementById("MBreset").innerHTML = `Reset the game for a multiplier increase.`;
-    document.getElementById("GBamount").innerHTML = `Generator Boost (${notate2(game.genmult.reset)}): requires ${notate2(game.genmult.requirement)} Third Generators.`;
-    document.getElementById("GBreset").innerHTML = `Reset the game for a multiplier increase on generators.`;
-}
+    document.getElementById("units").innerHTML = `You have <strong>${notate(game.units.total)}</strong> units.`;
+    document.getElementById("points").innerHTML = `You have <strong>${notate2(game.points.total)}</strong> points.`;
+    document.getElementById("reset").innerHTML = `Resets for <strong>${notate(game.units.start)}</strong> units.`;
+    document.getElementById("start").innerHTML = `Wait until ${notate(game.units.end)} units.`;
+    document.getElementById("utime").innerHTML = `${notate(game.units.time)} seconds.`;
+    if (OmegaNum.cmp(game.upgrade1.cost, 1) == 0) {
+        document.getElementById("upgrade1").innerHTML = `Decrease the units amount faster <br> Cost: <strong>${notate2(game.upgrade1.cost)}</strong> point <br> Level: ${notate2(game.upgrade1.level)}`;
+    } else {
+        document.getElementById("upgrade1").innerHTML = `Decrease the units amount faster <br> Cost: <strong>${notate2(game.upgrade1.cost)}</strong> points <br> Level: ${notate2(game.upgrade1.level)}`;
+    }
+    document.getElementById("upgrade2").innerHTML = `Increase amount of points needed for more points <br> Cost: <strong>${notate2(game.upgrade2.cost)}</strong> points <br> Level: ${notate2(game.upgrade2.level)}`;
+    document.getElementById("upgrade3").innerHTML = `Receive more points per reset <br> Cost: <strong>${notate2(game.upgrade3.cost)}</strong> points <br> Level: ${notate2(game.upgrade3.level)}`;
+    document.getElementById("upgrade4").innerHTML = `The upgrade above becomes stronger <br> <br> Cost: <strong>${notate2(game.upgrade4.cost)}</strong> units <br> Level: ${notate2(game.upgrade4.level)}`;
+    document.getElementById("upgrade5").innerHTML = `The upgrade above becomes stronger <br> <br> Cost: <strong>${notate2(game.upgrade5.cost)}</strong> units <br> Level: ${notate2(game.upgrade5.level)}`;
+    document.getElementById("upgrade6").innerHTML = `The upgrade above becomes stronger <br> <br> Cost: <strong>${notate2(game.upgrade6.cost)}</strong> units <br> Level: ${notate2(game.upgrade6.level)}`;
+};
+
+function divUnits() {
+    game.units.total = OmegaNum.pow(game.units.total, game.units.pow);
+    if (OmegaNum.cmp(game.units.total, game.units.end) <= 0) {
+        game.units.time = new OmegaNum("0");
+        game.units.start = OmegaNum.pow(game.units.start, 1.05);
+        game.units.total = game.units.start;
+        game.points.total = OmegaNum.add(game.points.total, OmegaNum.times(OmegaNum.log10(game.units.start), game.points.multiplier));
+    };
+};
+
+function upgrade1() {
+    while (OmegaNum.cmp(game.points.total, game.upgrade1.cost) >= 0) {
+        game.points.total = OmegaNum.sub(game.points.total, game.upgrade1.cost);
+        game.upgrade1.cost = OmegaNum.add(OmegaNum.pow(game.upgrade1.cost, 1.08), 1);
+        game.units.pow = OmegaNum.div(game.units.pow, game.upgrade1.effect);
+        game.upgrade1.level = OmegaNum.add(game.upgrade1.level, 1);
+    };
+};
+
+function upgrade2() {
+    while (OmegaNum.cmp(game.points.total, game.upgrade2.cost) >= 0) {
+        game.points.total = OmegaNum.sub(game.points.total, game.upgrade2.cost);
+        game.upgrade2.cost = OmegaNum.pow(100, OmegaNum.pow(1.15, game.upgrade2.level));
+        game.units.end = OmegaNum.pow(game.units.end, game.upgrade2.effect);
+        game.upgrade2.level = OmegaNum.add(game.upgrade2.level, 1);
+    };
+};
+
+function upgrade3() {
+    while (OmegaNum.cmp(game.points.total, game.upgrade3.cost) >= 0) {
+        game.points.total = OmegaNum.sub(game.points.total, game.upgrade3.cost);
+        game.upgrade3.cost = OmegaNum.times(game.upgrade3.cost, 1.67);
+        game.points.multiplier = OmegaNum.times(game.points.multiplier, game.upgrade3.effect);
+        game.upgrade3.level = OmegaNum.add(game.upgrade3.level, 1);
+    };
+};
+
+function upgrade4() {
+    while (OmegaNum.cmp(game.units.total, game.upgrade4.cost) >= 0) {
+        game.upgrade4.cost = OmegaNum.pow(game.upgrade4.cost, 1.63);
+        game.upgrade1.effect = OmegaNum.pow(game.upgrade1.effect, 1.1);
+        game.upgrade4.level = OmegaNum.add(game.upgrade4.level, 1);
+    };
+};
+
+function upgrade5() {
+    while (OmegaNum.cmp(game.units.total, game.upgrade5.cost) >= 0) {
+        game.upgrade5.cost = OmegaNum.pow(game.upgrade5.cost, 2.2);
+        game.upgrade2.effect = OmegaNum.add(game.upgrade2.effect, 0.02);
+        game.upgrade5.level = OmegaNum.add(game.upgrade5.level, 1);
+    };
+};
+
+function upgrade6() {
+    while (OmegaNum.cmp(game.units.total, game.upgrade6.cost) >= 0) {
+        game.upgrade6.cost = OmegaNum.pow(game.upgrade6.cost, 1.75);
+        game.upgrade2.effect = OmegaNum.add(game.upgrade2.effect, 0.01);
+        game.upgrade6.level = OmegaNum.add(game.upgrade6.level, 1);
+    };
+};
 
 var mainGameLoop = window.setInterval(function () {
-    ui();
-}, 1);
+    divUnits();
+}, 0);
 
-function notate(n = new OmegaNum(0)) {
-    n = new OmegaNum(n);
-
-    if (n.sign == -1) { return `-${n.abs()}`; }
-    if (isNaN(n.array[0])) { return "NaN"; }
-    if (!isFinite(n.array[0])) { return Infinity; }
-
-    let s = "";
-    if (!n.array[1]) {
-        let e = Math.floor(Math.log10(n.array[0]));
-        let m = n.array[0] / 10 ** e;
-        return e < 3 ? n.toPrecision(3) : `${m.toPrecision(3)}e${e}`;
-    }
-    else if (n.array[1] < 2) {
-        return `${Math.pow(10, n.array[0] - Math.floor(n.array[0])).toPrecision(3)}e${Math.floor(n.array[0]).toLocaleString("pt-BR")}`;
-    }
-    else {
-        return `${"e".repeat(n.array[1])}${Math.floor(n.array[0])}`;
-    }
-}
-
-function notate2(n = new OmegaNum(0)) {
-    n = new OmegaNum(n);
-
-    if (n.sign == -1) { return `-${n.abs()}`; }
-    if (isNaN(n.array[0])) { return "NaN"; }
-    if (!isFinite(n.array[0])) { return Infinity; }
-
-    let s = "";
-    if (!n.array[1]) {
-        let e = Math.floor(Math.log10(n.array[0]));
-        let m = n.array[0] / 10 ** e;
-        return e < 3 ? n.toFixed(0) : `${m.toPrecision(3)}e${e}`;
-    }
-    else if (n.array[1] < 2) {
-        return `${Math.pow(10, n.array[0] - Math.floor(n.array[0])).toPrecision(3)}e${Math.floor(n.array[0]).toLocaleString("pt-BR")}`;
-    }
-    else {
-        return `${"e".repeat(n.array[1])}${Math.floor(n.array[0])}`;
-    }
-}
-
-
-function Save() {
-    saveData = game;
-    localStorage.saveData = JSON.stringify(saveData);
-};
-
-function Load() {
-    game = new Game(JSON.parse(localStorage.saveData));
-    console.log("Save loaded");
-    return saveData.obj || "default";
-};
+var mainGameLoop = window.setInterval(function () {
+    game.units.time = OmegaNum.add(game.units.time, 0.02);
+}, 20);
