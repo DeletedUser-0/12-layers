@@ -14,7 +14,7 @@ class Game {
         this.upgrade1 = {
             cost: data?.upgrade1?.cost || 1,
             level: data?.upgrade1?.level || 0,
-            effect: data?.upgrade1?.effect || 1.00005,
+            effect: data?.upgrade1?.effect || 1.0001,
         };
         this.upgrade2 = {
             cost: data?.upgrade2?.cost || 10,
@@ -83,7 +83,7 @@ function upgrade1() {
 function upgrade2() {
     while (OmegaNum.cmp(game.points.total, game.upgrade2.cost) >= 0) {
         game.points.total = OmegaNum.sub(game.points.total, game.upgrade2.cost);
-        game.upgrade2.cost = OmegaNum.pow(100, OmegaNum.pow(1.15, game.upgrade2.level));
+        game.upgrade2.cost = OmegaNum.pow(10, OmegaNum.pow(1.15, game.upgrade2.level));
         game.units.end = OmegaNum.pow(game.units.end, game.upgrade2.effect);
         game.upgrade2.level = OmegaNum.add(game.upgrade2.level, 1);
     };
