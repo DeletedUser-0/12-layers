@@ -2,7 +2,7 @@ class Game {
     constructor(data) {
         this.units = {
             total: data?.units?.total || 10,
-            pow: data?.units?.pow || 0.9999,
+            pow: data?.units?.pow || 0.9998,
             start: data?.units?.start || 10,
             end: data?.units?.end || 1.5,
             time: data?.units?.time || 0,
@@ -54,7 +54,7 @@ function ui() {
     } else {
         document.getElementById("upgrade1").innerHTML = `Decrease the units amount faster <br> Cost: <strong>${notate2(game.upgrade1.cost)}</strong> points <br> Level: ${notate2(game.upgrade1.level)}`;
     }
-    document.getElementById("upgrade2").innerHTML = `Increase amount of points needed for more points <br> Cost: <strong>${notate2(game.upgrade2.cost)}</strong> points <br> Level: ${notate2(game.upgrade2.level)}`;
+    document.getElementById("upgrade2").innerHTML = `Increase amount of units needed for more points <br> Cost: <strong>${notate2(game.upgrade2.cost)}</strong> points <br> Level: ${notate2(game.upgrade2.level)}`;
     document.getElementById("upgrade3").innerHTML = `Receive more points per reset <br> Cost: <strong>${notate2(game.upgrade3.cost)}</strong> points <br> Level: ${notate2(game.upgrade3.level)}`;
     document.getElementById("upgrade4").innerHTML = `The upgrade above becomes stronger <br> <br> Cost: <strong>${notate2(game.upgrade4.cost)}</strong> units <br> Level: ${notate2(game.upgrade4.level)}`;
     document.getElementById("upgrade5").innerHTML = `The upgrade above becomes stronger <br> <br> Cost: <strong>${notate2(game.upgrade5.cost)}</strong> units <br> Level: ${notate2(game.upgrade5.level)}`;
